@@ -10,6 +10,12 @@ var utils = require('../lib/utils');
 var log = utils.log;
 
 var mypkg = require(path.join(__dirname, '..', 'package.json'));
+// Validating package.json for correct JSON syntax.
+try {
+  JSON.parse(mypkg);
+} catch(e) {
+  console.error("Could not load local package.json file. Probably invalid JSON.");
+}
 
 var commandList = ['init', 'generate'];
 var initDescription = 'Initialize a new DoneJS application in a new folder or the current one';
