@@ -10,7 +10,21 @@ var isWindows = require('os').platform() === 'win32';
 var utils = require('../lib/utils');
 var log = utils.log;
 
-var mypkg = require(path.join(__dirname, '..', 'package.json'));
+var mypkg = {};
+try {
+  var pkgFile = path.join(__dirname, '..', 'package.json');
+  // try to access the package.json file
+  fs.accessSync(pkgFile, fs.R_OK);
+  try {
+    mypkg = JSON.parse(pkgFile, 'utf8');
+  } catch (e) {
+    console.error('ERROR: Your local package.json is not valid JSON');
+    process.exit(1);
+  }
+} catch (e) {
+  console.log('WARN: No local package.json found');
+}
+
 var commandList = ['init', 'generate'];
 
 program.version(mypkg.version)
